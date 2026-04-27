@@ -133,9 +133,6 @@ export default function Contact() {
           </form>
         </div>
 
-        <div className="mt-20 text-center text-white/20 text-xs">
-          © 2025 LovcenWear. Sva prava zadržana.
-        </div>
       </div>
     </section>
   )

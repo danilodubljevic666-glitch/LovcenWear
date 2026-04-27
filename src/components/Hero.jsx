@@ -55,16 +55,7 @@ export default function Hero() {
 
       {/* Centre content — foreground */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
-        <p
-          className="text-white/60 text-2xl sm:text-3xl uppercase tracking-[0.3em] mb-4 transition-all duration-1000 ease-out"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0)' : 'translateY(20px)',
-            transitionDelay: '100ms',
-          }}
-        >
-          Dobrodošli na
-        </p>
+
         <h1
           className="text-white text-6xl sm:text-8xl md:text-9xl font-bold tracking-tight leading-none drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)] transition-all duration-1000 ease-out"
           style={{

@@ -10,11 +10,11 @@ import Preloader from './components/Preloader'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 
-function HomePage() {
+function HomePage({ ready }) {
   return (
     <div className="min-h-screen bg-black">
       <Navbar />
-      <Hero />
+      <Hero ready={ready} />
       <Products />
       <Contact />
       <Footer />
@@ -24,7 +24,11 @@ function HomePage() {
 
 function App() {
   const [loading, setLoading] = useState(true)
-  const handleDone = useCallback(() => setLoading(false), [])
+  const [ready, setReady] = useState(false)
+  const handleDone = useCallback(() => {
+    setLoading(false)
+    setReady(true)
+  }, [])
 
   return (
     <BrowserRouter>
@@ -32,7 +36,7 @@ function App() {
         {loading && <Preloader onDone={handleDone} />}
         <div style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.4s ease' }}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<HomePage ready={ready} />} />
             <Route path="/majica/:id" element={<ProductDetail />} />
             <Route path="/korpa" element={<Cart />} />
           </Routes>

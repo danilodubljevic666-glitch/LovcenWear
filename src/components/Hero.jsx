@@ -13,13 +13,14 @@ const heroShirts = [
   },
 ]
 
-export default function Hero() {
+export default function Hero({ ready = false }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    if (!ready) return
     const t = setTimeout(() => setVisible(true), 100)
     return () => clearTimeout(t)
-  }, [])
+  }, [ready])
 
   return (
     <section

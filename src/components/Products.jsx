@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { products } from '../data/products'
+import { products, ORIGINAL_PRICE } from '../data/products'
 
 function ProductCard({ product }) {
   const previewColor = product.colors[0]
@@ -10,7 +10,10 @@ function ProductCard({ product }) {
       to={`/majica/${product.id}`}
       className="group cursor-pointer bg-zinc-900 hover:bg-zinc-800 transition-colors duration-300 rounded-sm overflow-hidden block"
     >
-      <div className="aspect-square bg-zinc-200 flex items-center justify-center p-6 overflow-hidden">
+      <div className="aspect-square bg-zinc-200 flex items-center justify-center p-6 overflow-hidden relative">
+        <div className="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-2.5 py-1 z-10">
+          Popust
+        </div>
         <img
           src={src}
           alt={product.name}
@@ -32,8 +35,8 @@ function ProductCard({ product }) {
           ))}
         </div>
         <div className="flex items-center justify-center gap-2 mt-3">
-          <span className="text-white/40 text-sm line-through">26.99€</span>
-          <span className="text-yellow-500 font-semibold text-base">19.99€</span>
+          <span className="text-white/40 text-sm line-through">{ORIGINAL_PRICE.toFixed(2)}€</span>
+          <span className="text-yellow-500 font-semibold text-base">{product.price.toFixed(2)}€</span>
         </div>
       </div>
     </Link>

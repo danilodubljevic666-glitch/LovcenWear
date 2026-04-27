@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getProductById, sizes } from '../data/products'
+import { getProductById, sizes, ORIGINAL_PRICE } from '../data/products'
 import { useCart } from '../context/CartContext'
 
 function isLight(colorName) {
@@ -32,6 +32,9 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(null)
   const [imgLoaded, setImgLoaded] = useState(false)
   const [toast, setToast] = useState(null)
+  const [addPrezime, setAddPrezime] = useState(false)
+  const [prezime, setPrezime] = useState('')
+  const [prezimeError, setPrezimeError] = useState(false)
 
   if (!product) {
     return (
@@ -49,16 +52,29 @@ export default function ProductDetail() {
   // Dynamic background: dark bg for light shirts, light bg for dark shirts
   const imgBg = lightShirt ? 'bg-zinc-700' : 'bg-zinc-200'
 
+  const isPolo = product.id === 'polo-majica'
+  const customization = isPolo && addPrezime && prezime.trim() ? { prezime: prezime.trim() } : null
+
+  const validateCustomization = () => {
+    if (isPolo && addPrezime && !prezime.trim()) {
+      setPrezimeError(true)
+      return false
+    }
+    return true
+  }
+
   const handleAddToCart = () => {
     if (!selectedSize) return
-    addItem(product, color, selectedSize)
+    if (!validateCustomization()) return
+    addItem(product, color, selectedSize, customization)
     setToast(`${product.name} dodan u korpu!`)
     setTimeout(() => setToast(null), 2500)
   }
 
   const handleBuyNow = () => {
     if (!selectedSize) return
-    addItem(product, color, selectedSize)
+    if (!validateCustomization()) return
+    addItem(product, color, selectedSize, customization)
     navigate('/korpa')
   }
 
@@ -116,9 +132,11 @@ export default function ProductDetail() {
               {product.name}
             </h1>
             <div className="flex items-center gap-3 mt-4">
-              <span className="text-white/40 text-lg line-through">26.99€</span>
-              <span className="text-yellow-500 text-2xl font-bold">19.99€</span>
-              <span className="bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-sm uppercase tracking-wide">-26%</span>
+              <span className="text-white/40 text-lg line-through">{ORIGINAL_PRICE.toFixed(2)}€</span>
+              <span className="text-yellow-500 text-2xl font-bold">{product.price.toFixed(2)}€</span>
+              <span className="bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-sm uppercase tracking-wide">
+                -{Math.round((1 - product.price / ORIGINAL_PRICE) * 100)}%
+              </span>
             </div>
           </div>
 
@@ -169,6 +187,46 @@ export default function ProductDetail() {
               ))}
             </div>
           </div>
+
+          {/* Polo customization */}
+          {isPolo && (
+            <div className="flex flex-col gap-3">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <div
+                  onClick={() => { setAddPrezime((v) => !v); setPrezimeError(false); setPrezime('') }}
+                  className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all duration-200 shrink-0 cursor-pointer
+                    ${addPrezime ? 'bg-yellow-500 border-yellow-500' : 'bg-transparent border-white/30 group-hover:border-white/60'}`}
+                >
+                  {addPrezime && (
+                    <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+                <span
+                  className="text-white/70 text-sm select-none"
+                  onClick={() => { setAddPrezime((v) => !v); setPrezimeError(false); setPrezime('') }}
+                >
+                  Dodajte prezime na rukav majice
+                  <span className="text-yellow-500 font-semibold ml-1">+3€</span>
+                </span>
+              </label>
+
+              {addPrezime && (
+                <div>
+                  <input
+                    type="text"
+                    value={prezime}
+                    onChange={(e) => { setPrezime(e.target.value); setPrezimeError(false) }}
+                    placeholder="Unesite prezime"
+                    className={`w-full bg-zinc-800 border text-white text-sm px-3 py-2.5 outline-none focus:border-yellow-500 transition-colors placeholder:text-white/20 rounded-sm
+                      ${prezimeError ? 'border-red-500' : 'border-white/20'}`}
+                  />
+                  {prezimeError && <p className="text-red-400 text-xs mt-1">Unesite prezime ili uklonite kvačicu</p>}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="flex flex-col gap-3">

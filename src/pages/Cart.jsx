@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 import emailjs from '@emailjs/browser'
 import { useCart } from '../context/CartContext'
 
+const CUSTOMIZATION_FEE = 3
+
+const itemTotal = (item) =>
+  item.qty * item.product.price + (item.customization?.prezime ? item.qty * CUSTOMIZATION_FEE : 0)
+
 const SERVICE_ID        = 'service_35t1kg4'
 const ORDER_TEMPLATE_ID = 'template_jhrvu48'
 const PUBLIC_KEY        = 'ASltbUGew2GCqRWiC'
@@ -35,10 +40,12 @@ function OrderModal({ items, onClose, onSuccess }) {
 
     setStatus('sending')
     const first  = items[0]
-    const ukupno = (items.reduce((s, i) => s + i.qty, 0) * 19.99).toFixed(2)
-    const stavke = items.map((i) =>
-      `• ${i.product.name} | Boja: ${i.color.name} | Veličina: ${i.size} | Kom: ${i.qty}`
-    ).join('\n')
+    const ukupno = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
+    const stavke = items.map((i) => {
+      let line = `• ${i.product.name} | Boja: ${i.color.name} | Veličina: ${i.size} | Kom: ${i.qty}`
+      if (i.customization?.prezime) line += ` | Prezime na rukavu: ${i.customization.prezime}`
+      return line
+    }).join('\n')
 
     try {
       await emailjs.send(SERVICE_ID, ORDER_TEMPLATE_ID, {
@@ -104,13 +111,16 @@ function OrderModal({ items, onClose, onSuccess }) {
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-xs font-medium truncate">{item.product.name}</p>
                     <p className="text-white/40 text-xs">{item.color.name} · {item.size} · {item.qty}kom</p>
+                    {item.customization?.prezime && (
+                      <p className="text-yellow-500/60 text-xs">Prezime: {item.customization.prezime}</p>
+                    )}
                   </div>
-                  <p className="text-yellow-500 text-xs font-bold shrink-0">{(item.qty * 19.99).toFixed(2)}€</p>
+                  <p className="text-yellow-500 text-xs font-bold shrink-0">{itemTotal(item).toFixed(2)}€</p>
                 </div>
               ))}
               <div className="flex justify-between pt-2 border-t border-white/10">
                 <span className="text-white/50 text-sm">Ukupno</span>
-                <span className="text-yellow-500 font-bold">{(items.reduce((s, i) => s + i.qty, 0) * 19.99).toFixed(2)}€</span>
+                <span className="text-yellow-500 font-bold">{items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)}€</span>
               </div>
             </div>
 
@@ -162,7 +172,7 @@ export default function Cart() {
   const { items, removeItem, updateQty, clearCart } = useCart()
   const [showModal, setShowModal] = useState(false)
 
-  const total = (items.reduce((s, i) => s + i.qty, 0) * 19.99).toFixed(2)
+  const total = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
 
   return (
     <div className="min-h-screen bg-black">
@@ -214,7 +224,10 @@ export default function Cart() {
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-medium text-sm sm:text-base truncate">{item.product.name}</p>
                     <p className="text-white/40 text-xs mt-0.5">{item.color.name} · {item.size}</p>
-                    <p className="text-yellow-500 text-sm font-bold mt-1">{(item.qty * 19.99).toFixed(2)}€</p>
+                    {item.customization?.prezime && (
+                      <p className="text-yellow-500/70 text-xs mt-0.5">Prezime na rukavu: {item.customization.prezime}</p>
+                    )}
+                    <p className="text-yellow-500 text-sm font-bold mt-1">{itemTotal(item).toFixed(2)}€</p>
                   </div>
                   {/* Qty controls */}
                   <div className="flex items-center gap-2 shrink-0">
@@ -248,6 +261,16 @@ export default function Cart() {
                 <span className="text-white font-semibold">Ukupno</span>
                 <span className="text-yellow-500 text-xl font-bold">{total}€</span>
               </div>
+
+              <div className="bg-zinc-800 rounded-sm px-4 py-3 flex flex-col gap-1 border border-white/5">
+                <p className="text-white/70 text-xs leading-relaxed">
+                  <span className="text-yellow-500 font-semibold">Dostava za sve gradove 4€.</span> Važi samo za gradove Crne Gore.
+                </p>
+                <p className="text-white/50 text-xs leading-relaxed">
+                  Majice će biti pripremljene i isporučene u roku od 3–5 radnih dana.
+                </p>
+              </div>
+
               <button
                 onClick={() => setShowModal(true)}
                 className="w-full py-4 bg-white text-black text-sm font-semibold uppercase tracking-widest hover:bg-yellow-500 transition-colors duration-300 rounded-sm cursor-pointer mt-2"

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const heroShirts = [
-  { src: '/majice/Krstas majica/krstas png.png',    alt: 'Krstas majica',  direction: 'left' },
-  { src: '/majice/Premium majica/bijela premium.png', alt: 'Premium majica', direction: 'right' },
+  { src: '/majice/Ultras majica/Ultras bijela.png',   alt: 'Ultras majica',  direction: 'left' },
+  { src: '/majice/Premium majica/crvena premium.png', alt: 'Premium majica', direction: 'right' },
 ]
 
 const titleStyle = {
@@ -54,6 +54,10 @@ export default function Hero({ ready = false }) {
 
         {/* Title — top */}
         <div className="relative z-10 text-center px-4 pt-16 pb-2">
+          <p className="text-white/50 text-xs sm:text-sm uppercase tracking-[0.25em] mb-3"
+            style={fadeUp('0ms')}>
+            Dobrodošli na
+          </p>
           <h1
             className="text-white text-5xl sm:text-7xl font-bold tracking-tight leading-none"
             style={{ ...titleStyle, ...fadeUp('0ms') }}
@@ -110,6 +114,10 @@ export default function Hero({ ready = false }) {
 
         {/* Centered content */}
         <div className="relative z-10 flex flex-col items-center text-center px-4 gap-6">
+          <p className="text-white/50 text-sm uppercase tracking-[0.25em] -mb-4"
+            style={fadeUp('100ms')}>
+            Dobrodošli na
+          </p>
           <h1
             className="text-white text-8xl xl:text-9xl font-bold tracking-tight leading-none"
             style={{ ...titleStyle, ...fadeUp('200ms') }}

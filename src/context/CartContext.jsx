@@ -15,14 +15,14 @@ export function CartProvider({ children }) {
     localStorage.setItem('cart', JSON.stringify(items))
   }, [items])
 
-  const addItem = (product, color, size) => {
-    const key = `${product.id}__${color.name}__${size}`
+  const addItem = (product, color, size, customization = null) => {
+    const key = `${product.id}__${color.name}__${size}__${customization?.prezime ?? ''}`
     setItems((prev) => {
       const existing = prev.find((i) => i.key === key)
       if (existing) {
         return prev.map((i) => i.key === key ? { ...i, qty: i.qty + 1 } : i)
       }
-      return [...prev, { key, product, color, size, qty: 1 }]
+      return [...prev, { key, product, color, size, qty: 1, customization }]
     })
   }
 

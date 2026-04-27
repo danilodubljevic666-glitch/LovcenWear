@@ -53,7 +53,7 @@ export default function Hero({ ready = false }) {
       <div className="lg:hidden flex flex-col min-h-[calc(100vh-4rem)]">
 
         {/* Title — top */}
-        <div className="relative z-10 text-center px-4 pt-8 pb-2">
+        <div className="relative z-10 text-center px-4 pt-16 pb-2">
           <h1
             className="text-white text-5xl sm:text-7xl font-bold tracking-tight leading-none"
             style={{ ...titleStyle, ...fadeUp('0ms') }}
@@ -63,7 +63,7 @@ export default function Hero({ ready = false }) {
           <img
             src="/natpis.PNG"
             alt="Ponos u svakom šavu"
-            className="mt-3 h-14 sm:h-20 w-auto object-contain mx-auto drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
+            className="mt-[30px] h-20 sm:h-28 w-auto object-contain mx-auto drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
             style={fadeUp('300ms')}
           />
         </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const heroShirts = [
-  { src: '/majice/Ultras majica/Ultras bijela.png',   alt: 'Ultras majica',  direction: 'left' },
-  { src: '/majice/Premium majica/crvena premium.png', alt: 'Premium majica', direction: 'right' },
+  { src: '/majice/Ultras majica/Ultras bijela.png',   alt: 'Ultras majica',  direction: 'left',  imgScale: 'scale-[0.85]' },
+  { src: '/majice/Premium majica/crvena premium.png', alt: 'Premium majica', direction: 'right', imgScale: '' },
 ]
 
 const titleStyle = {
@@ -37,7 +37,7 @@ export default function Hero({ ready = false }) {
     transform: visible
       ? 'translateX(0) rotate(0deg)'
       : direction === 'left' ? 'translateX(-120%) rotate(-10deg)' : 'translateX(120%) rotate(10deg)',
-    opacity: visible ? 0.35 : 0,
+    opacity: visible ? 1 : 0,
     transition: 'transform 1s ease, opacity 1s ease',
   })
 
@@ -79,14 +79,14 @@ export default function Hero({ ready = false }) {
               <img
                 src={shirt.src}
                 alt={shirt.alt}
-                className="h-[46vh] sm:h-[55vh] w-auto object-contain"
+                className={`h-[46vh] sm:h-[55vh] w-auto object-contain ${shirt.imgScale}`}
               />
             </div>
           ))}
         </div>
 
         {/* CTA — bottom */}
-        <div className="relative z-10 text-center pb-10" style={fadeUp('600ms')}>
+        <div className="relative z-10 text-center pb-20" style={fadeUp('600ms')}>
           <a
             href="#majice"
             className="inline-block bg-white text-black text-sm font-semibold uppercase tracking-widest px-8 py-3 hover:bg-yellow-600 hover:text-white transition-colors duration-300"
@@ -106,7 +106,7 @@ export default function Hero({ ready = false }) {
               <img
                 src={shirt.src}
                 alt={shirt.alt}
-                className="h-[80vh] w-auto object-contain"
+                className={`h-[80vh] w-auto object-contain ${shirt.imgScale}`}
               />
             </div>
           ))}

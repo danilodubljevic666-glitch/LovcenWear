@@ -9,13 +9,14 @@ import emailjs from '@emailjs/browser'
 //    "To email" postavi na lovcenwear@gmail.com
 // 4. Account → General → Public Key → kopiraj
 // -------------------------------------------------------------------
-const SERVICE_ID  = 'YOUR_SERVICE_ID'
-const TEMPLATE_ID = 'YOUR_TEMPLATE_ID'
-const PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'
+const SERVICE_ID  = 'service_35t1kg4'
+const TEMPLATE_ID = 'template_jhrvu48'
+const PUBLIC_KEY  = 'ASltbUGew2GCqRWiC'
 
 export default function Contact() {
   const formRef = useRef(null)
-  const [status, setStatus] = useState('idle') // idle | sending | success | error
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -24,7 +25,9 @@ export default function Contact() {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, { publicKey: PUBLIC_KEY })
       setStatus('success')
       formRef.current.reset()
-    } catch {
+    } catch (err) {
+      console.error('EmailJS greška:', err)
+      setError(err?.text || err?.message || JSON.stringify(err))
       setStatus('error')
     }
   }
@@ -127,7 +130,7 @@ export default function Contact() {
             )}
             {status === 'error' && (
               <p className="text-red-400 text-sm text-center mt-1">
-                Greška pri slanju. Kontaktirajte nas direktno na lovcenwear@gmail.com
+                Greška: {error}
               </p>
             )}
           </form>

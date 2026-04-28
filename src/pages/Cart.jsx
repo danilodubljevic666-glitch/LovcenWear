@@ -5,8 +5,10 @@ import { useCart } from '../context/CartContext'
 
 const CUSTOMIZATION_FEE = 3
 
-const itemTotal = (item) =>
-  item.qty * item.product.price + (item.customization?.prezime ? item.qty * CUSTOMIZATION_FEE : 0)
+const itemTotal = (item) => {
+  const extras = (item.customization?.prezimeRukav ? 1 : 0) + (item.customization?.prezimeLedjima ? 1 : 0)
+  return item.qty * item.product.price + item.qty * extras * CUSTOMIZATION_FEE
+}
 
 const SERVICE_ID        = 'service_35t1kg4'
 const ORDER_TEMPLATE_ID = 'template_jhrvu48'
@@ -14,7 +16,7 @@ const PUBLIC_KEY        = 'ASltbUGew2GCqRWiC'
 const GITHUB_BASE       = 'https://raw.githubusercontent.com/danilodubljevic666-glitch/LovcenWear/main/public'
 
 function OrderModal({ items, onClose, onSuccess }) {
-  const [form, setForm]       = useState({ ime: '', prezime: '', telefon: '', adresa: '' })
+  const [form, setForm]       = useState({ ime: '', prezime: '', telefon: '', grad: '', adresa: '' })
   const [errors, setErrors]   = useState({})
   const [status, setStatus]   = useState('idle') // idle | sending | success | error
   const [errMsg, setErrMsg]   = useState('')
@@ -29,6 +31,7 @@ function OrderModal({ items, onClose, onSuccess }) {
     if (!form.ime.trim())     e.ime     = 'Obavezno polje'
     if (!form.prezime.trim()) e.prezime = 'Obavezno polje'
     if (!form.telefon.trim()) e.telefon = 'Obavezno polje'
+    if (!form.grad.trim())    e.grad    = 'Obavezno polje'
     if (!form.adresa.trim())  e.adresa  = 'Obavezno polje'
     return e
   }
@@ -43,7 +46,8 @@ function OrderModal({ items, onClose, onSuccess }) {
     const ukupno = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
     const stavke = items.map((i) => {
       let line = `• ${i.product.name} | Boja: ${i.color.name} | Veličina: ${i.size} | Kom: ${i.qty}`
-      if (i.customization?.prezime) line += ` | Prezime na rukavu: ${i.customization.prezime}`
+      if (i.customization?.prezimeLedjima) line += ` | Prezime na leđima: ${i.customization.prezimeLedjima}`
+      if (i.customization?.prezimeRukav) line += ` | Prezime na rukavu: ${i.customization.prezimeRukav}`
       return line
     }).join('\n')
 
@@ -51,6 +55,7 @@ function OrderModal({ items, onClose, onSuccess }) {
       await emailjs.send(SERVICE_ID, ORDER_TEMPLATE_ID, {
         customer_name: `${form.ime} ${form.prezime}`,
         phone:         form.telefon,
+        city:          form.grad,
         address:       form.adresa,
         product_name:  items.length === 1 ? first.product.name : `${items.length} artikla`,
         color:         first.color.name,
@@ -111,8 +116,11 @@ function OrderModal({ items, onClose, onSuccess }) {
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-xs font-medium truncate">{item.product.name}</p>
                     <p className="text-white/40 text-xs">{item.color.name} · {item.size} · {item.qty}kom</p>
-                    {item.customization?.prezime && (
-                      <p className="text-yellow-500/60 text-xs">Prezime: {item.customization.prezime}</p>
+                    {item.customization?.prezimeLedjima && (
+                      <p className="text-yellow-500/60 text-xs">Leđa: {item.customization.prezimeLedjima}</p>
+                    )}
+                    {item.customization?.prezimeRukav && (
+                      <p className="text-yellow-500/60 text-xs">Rukav: {item.customization.prezimeRukav}</p>
                     )}
                   </div>
                   <p className="text-yellow-500 text-xs font-bold shrink-0">{itemTotal(item).toFixed(2)}€</p>
@@ -146,8 +154,14 @@ function OrderModal({ items, onClose, onSuccess }) {
                 {errors.telefon && <p className="text-red-400 text-xs mt-1">{errors.telefon}</p>}
               </div>
               <div>
+                <label className="block text-white/40 text-xs uppercase tracking-widest mb-1.5">Grad</label>
+                <input name="grad" value={form.grad} onChange={handleChange} placeholder="Npr. Podgorica"
+                  className={`w-full bg-zinc-800 border text-white text-sm px-3 py-2.5 outline-none focus:border-yellow-500 transition-colors placeholder:text-white/20 rounded-sm ${errors.grad ? 'border-red-500' : 'border-white/10'}`} />
+                {errors.grad && <p className="text-red-400 text-xs mt-1">{errors.grad}</p>}
+              </div>
+              <div>
                 <label className="block text-white/40 text-xs uppercase tracking-widest mb-1.5">Adresa dostave</label>
-                <input name="adresa" value={form.adresa} onChange={handleChange} placeholder="Ulica, broj, grad"
+                <input name="adresa" value={form.adresa} onChange={handleChange} placeholder="Ulica i broj"
                   className={`w-full bg-zinc-800 border text-white text-sm px-3 py-2.5 outline-none focus:border-yellow-500 transition-colors placeholder:text-white/20 rounded-sm ${errors.adresa ? 'border-red-500' : 'border-white/10'}`} />
                 {errors.adresa && <p className="text-red-400 text-xs mt-1">{errors.adresa}</p>}
               </div>
@@ -224,8 +238,11 @@ export default function Cart() {
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-medium text-sm sm:text-base truncate">{item.product.name}</p>
                     <p className="text-white/40 text-xs mt-0.5">{item.color.name} · {item.size}</p>
-                    {item.customization?.prezime && (
-                      <p className="text-yellow-500/70 text-xs mt-0.5">Prezime na rukavu: {item.customization.prezime}</p>
+                    {item.customization?.prezimeLedjima && (
+                      <p className="text-yellow-500/70 text-xs mt-0.5">Leđa: {item.customization.prezimeLedjima}</p>
+                    )}
+                    {item.customization?.prezimeRukav && (
+                      <p className="text-yellow-500/70 text-xs mt-0.5">Rukav: {item.customization.prezimeRukav}</p>
                     )}
                     <p className="text-yellow-500 text-sm font-bold mt-1">{itemTotal(item).toFixed(2)}€</p>
                   </div>

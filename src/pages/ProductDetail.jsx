@@ -59,14 +59,14 @@ export default function ProductDetail() {
 
   const customization = (() => {
     const c = {}
-    if (isPolo && addRukav && prezimeRukav.trim()) c.prezimeRukav = prezimeRukav.trim()
+    if (addRukav && prezimeRukav.trim()) c.prezimeRukav = prezimeRukav.trim()
     if (addLedjima && prezimeLedjima.trim()) c.prezimeLedjima = prezimeLedjima.trim()
     return Object.keys(c).length > 0 ? c : null
   })()
 
   const validateCustomization = () => {
     let valid = true
-    if (isPolo && addRukav && !prezimeRukav.trim()) { setPrezimeRukavError(true); valid = false }
+    if (addRukav && !prezimeRukav.trim()) { setPrezimeRukavError(true); valid = false }
     if (addLedjima && !prezimeLedjima.trim()) { setPrezimeLedjimaError(true); valid = false }
     return valid
   }
@@ -218,7 +218,7 @@ export default function ProductDetail() {
                   className="text-white/70 text-sm select-none"
                   onClick={() => { setAddLedjima((v) => !v); setPrezimeLedjimaError(false); setPrezimeLedjima('') }}
                 >
-                  Dodajte prezime na leđima majice
+                  Dodajte prezime (ili ime) na leđima majice
                   <span className="text-yellow-500 font-semibold ml-1">+3€</span>
                 </span>
               </label>
@@ -255,7 +255,7 @@ export default function ProductDetail() {
                   className="text-white/70 text-sm select-none"
                   onClick={() => { setAddRukav((v) => !v); setPrezimeRukavError(false); setPrezimeRukav('') }}
                 >
-                  Dodajte prezime na rukav majice
+                  Dodajte prezime (ili ime) na rukav majice
                   <span className="text-yellow-500 font-semibold ml-1">+3€</span>
                 </span>
               </label>

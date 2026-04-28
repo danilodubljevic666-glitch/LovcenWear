@@ -27,7 +27,7 @@ export const products = [
       { name: 'Bijela', file: 'Ultras bijela.png',  swatch: '#f5f5f5' },
     ],
   },
-  { id: 'krstas-majica',            name: 'Krstas Majica',            price: 19.99, folder: 'Krstas majica',
+  { id: 'krstas-majica',            name: 'Krstaš Majica',            price: 19.99, folder: 'Krstas majica',
     colors: [
       { name: 'Bijela',        file: 'krstas png.png',         swatch: '#f5f5f5' },
       { name: 'Crna',          file: 'krstas crni png.png',    swatch: '#1a1a1a' },
@@ -59,13 +59,13 @@ export const products = [
       { name: 'Bijela', file: 'mne bijela png.png',  swatch: '#f5f5f5' },
     ],
   },
-  { id: 'krstas-majica-2',          name: 'Krstas Majica 2',          price: 19.99, folder: 'krstas majica 2',
+  { id: 'krstas-majica-2',          name: 'Krstaš Majica 2',          price: 19.99, folder: 'krstas majica 2',
     colors: [
       { name: 'Bijela', file: 'krstas moj 1 bijela png.png', swatch: '#f5f5f5' },
       { name: 'Crna',   file: 'krstas moj 1 crna png.png',   swatch: '#1a1a1a' },
     ],
   },
-  { id: 'krstas-majica-3',          name: 'Krstas Majica 3',          price: 19.99, folder: 'krstas majica 3',
+  { id: 'krstas-majica-3',          name: 'Krstaš Majica 3',          price: 19.99, folder: 'krstas majica 3',
     colors: [
       { name: 'Crna',   file: 'krstas moj 2 crna png.png',   swatch: '#1a1a1a' },
       { name: 'Bijela', file: 'krstas moj 2 bijela png.png',  swatch: '#f5f5f5' },
@@ -79,7 +79,7 @@ export const products = [
   },
 ]
 
-export const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+export const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']
 
 export function getProductById(id) {
   return products.find((p) => p.id === id)

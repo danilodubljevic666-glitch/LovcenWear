@@ -16,7 +16,7 @@ export function CartProvider({ children }) {
   }, [items])
 
   const addItem = (product, color, size, customization = null) => {
-    const key = `${product.id}__${color.name}__${size}__${customization?.prezime ?? ''}`
+    const key = `${product.id}__${color.name}__${size}__${customization?.prezimeRukav ?? ''}__${customization?.prezimeLedjima ?? ''}`
     setItems((prev) => {
       const existing = prev.find((i) => i.key === key)
       if (existing) {

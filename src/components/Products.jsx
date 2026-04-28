@@ -58,8 +58,16 @@ export default function Products() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <div key={product.id} className="flex flex-col gap-1.5">
+              <ProductCard product={product} />
+              {index === 0 && (
+                <p className="text-red-500 text-xs font-semibold text-center tracking-wide"
+                  style={{ animation: 'pulse 1.5s ease-in-out infinite', textShadow: '0 0 8px rgba(239,68,68,0.8)' }}>
+                  🔥 17 prodatih majici u zadnjih 24h
+                </p>
+              )}
+            </div>
           ))}
         </div>
       </div>

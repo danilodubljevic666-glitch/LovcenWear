@@ -32,9 +32,12 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(null)
   const [imgLoaded, setImgLoaded] = useState(false)
   const [toast, setToast] = useState(null)
-  const [addPrezime, setAddPrezime] = useState(false)
-  const [prezime, setPrezime] = useState('')
-  const [prezimeError, setPrezimeError] = useState(false)
+  const [addRukav, setAddRukav] = useState(false)
+  const [prezimeRukav, setPrezimeRukav] = useState('')
+  const [prezimeRukavError, setPrezimeRukavError] = useState(false)
+  const [addLedjima, setAddLedjima] = useState(false)
+  const [prezimeLedjima, setPrezimeLedjima] = useState('')
+  const [prezimeLedjimaError, setPrezimeLedjimaError] = useState(false)
 
   if (!product) {
     return (
@@ -53,14 +56,19 @@ export default function ProductDetail() {
   const imgBg = lightShirt ? 'bg-zinc-700' : 'bg-zinc-200'
 
   const isPolo = product.id === 'polo-majica'
-  const customization = isPolo && addPrezime && prezime.trim() ? { prezime: prezime.trim() } : null
+
+  const customization = (() => {
+    const c = {}
+    if (isPolo && addRukav && prezimeRukav.trim()) c.prezimeRukav = prezimeRukav.trim()
+    if (addLedjima && prezimeLedjima.trim()) c.prezimeLedjima = prezimeLedjima.trim()
+    return Object.keys(c).length > 0 ? c : null
+  })()
 
   const validateCustomization = () => {
-    if (isPolo && addPrezime && !prezime.trim()) {
-      setPrezimeError(true)
-      return false
-    }
-    return true
+    let valid = true
+    if (isPolo && addRukav && !prezimeRukav.trim()) { setPrezimeRukavError(true); valid = false }
+    if (addLedjima && !prezimeLedjima.trim()) { setPrezimeLedjimaError(true); valid = false }
+    return valid
   }
 
   const handleAddToCart = () => {
@@ -188,16 +196,19 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* Polo customization */}
-          {isPolo && (
-            <div className="flex flex-col gap-3">
+          {/* Customization */}
+          <div className="flex flex-col gap-4">
+            <p className="text-white/40 text-xs uppercase tracking-widest">Personalizacija</p>
+
+            {/* Prezime na leđima — sve majice */}
+            <div className="flex flex-col gap-2">
               <label className="flex items-center gap-3 cursor-pointer group">
                 <div
-                  onClick={() => { setAddPrezime((v) => !v); setPrezimeError(false); setPrezime('') }}
+                  onClick={() => { setAddLedjima((v) => !v); setPrezimeLedjimaError(false); setPrezimeLedjima('') }}
                   className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all duration-200 shrink-0 cursor-pointer
-                    ${addPrezime ? 'bg-yellow-500 border-yellow-500' : 'bg-transparent border-white/30 group-hover:border-white/60'}`}
+                    ${addLedjima ? 'bg-yellow-500 border-yellow-500' : 'bg-transparent border-white/30 group-hover:border-white/60'}`}
                 >
-                  {addPrezime && (
+                  {addLedjima && (
                     <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
@@ -205,28 +216,64 @@ export default function ProductDetail() {
                 </div>
                 <span
                   className="text-white/70 text-sm select-none"
-                  onClick={() => { setAddPrezime((v) => !v); setPrezimeError(false); setPrezime('') }}
+                  onClick={() => { setAddLedjima((v) => !v); setPrezimeLedjimaError(false); setPrezimeLedjima('') }}
+                >
+                  Dodajte prezime na leđima majice
+                  <span className="text-yellow-500 font-semibold ml-1">+3€</span>
+                </span>
+              </label>
+              {addLedjima && (
+                <div>
+                  <input
+                    type="text"
+                    value={prezimeLedjima}
+                    onChange={(e) => { setPrezimeLedjima(e.target.value); setPrezimeLedjimaError(false) }}
+                    placeholder="Unesite prezime"
+                    className={`w-full bg-zinc-800 border text-white text-sm px-3 py-2.5 outline-none focus:border-yellow-500 transition-colors placeholder:text-white/20 rounded-sm
+                      ${prezimeLedjimaError ? 'border-red-500' : 'border-white/20'}`}
+                  />
+                  {prezimeLedjimaError && <p className="text-red-400 text-xs mt-1">Unesite prezime ili uklonite kvačicu</p>}
+                </div>
+              )}
+            </div>
+
+            {/* Prezime na rukavu — sve majice */}
+            <div className="flex flex-col gap-2">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <div
+                  onClick={() => { setAddRukav((v) => !v); setPrezimeRukavError(false); setPrezimeRukav('') }}
+                  className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all duration-200 shrink-0 cursor-pointer
+                    ${addRukav ? 'bg-yellow-500 border-yellow-500' : 'bg-transparent border-white/30 group-hover:border-white/60'}`}
+                >
+                  {addRukav && (
+                    <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+                <span
+                  className="text-white/70 text-sm select-none"
+                  onClick={() => { setAddRukav((v) => !v); setPrezimeRukavError(false); setPrezimeRukav('') }}
                 >
                   Dodajte prezime na rukav majice
                   <span className="text-yellow-500 font-semibold ml-1">+3€</span>
                 </span>
               </label>
-
-              {addPrezime && (
+              {addRukav && (
                 <div>
                   <input
                     type="text"
-                    value={prezime}
-                    onChange={(e) => { setPrezime(e.target.value); setPrezimeError(false) }}
+                    value={prezimeRukav}
+                    onChange={(e) => { setPrezimeRukav(e.target.value); setPrezimeRukavError(false) }}
                     placeholder="Unesite prezime"
                     className={`w-full bg-zinc-800 border text-white text-sm px-3 py-2.5 outline-none focus:border-yellow-500 transition-colors placeholder:text-white/20 rounded-sm
-                      ${prezimeError ? 'border-red-500' : 'border-white/20'}`}
+                      ${prezimeRukavError ? 'border-red-500' : 'border-white/20'}`}
                   />
-                  {prezimeError && <p className="text-red-400 text-xs mt-1">Unesite prezime ili uklonite kvačicu</p>}
+                  {prezimeRukavError && <p className="text-red-400 text-xs mt-1">Unesite prezime ili uklonite kvačicu</p>}
                 </div>
               )}
             </div>
-          )}
+          </div>
 
           {/* Buttons */}
           <div className="flex flex-col gap-3">

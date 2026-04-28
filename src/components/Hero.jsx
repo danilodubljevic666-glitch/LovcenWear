@@ -89,7 +89,7 @@ export default function Hero({ ready = false }) {
         <div className="relative z-10 text-center pb-20" style={fadeUp('600ms')}>
           <a
             href="#majice"
-            className="inline-block bg-white text-black text-sm font-semibold uppercase tracking-widest px-8 py-3 hover:bg-yellow-600 hover:text-white transition-colors duration-300"
+            className="inline-block bg-white text-black text-sm font-semibold uppercase tracking-widest px-8 py-3 hover:bg-yellow-600 hover:text-white transition-colors duration-300 rounded-[10px]"
           >
             Pogledaj kolekciju
           </a>
@@ -133,7 +133,7 @@ export default function Hero({ ready = false }) {
           <div style={fadeUp('800ms')}>
             <a
               href="#majice"
-              className="inline-block bg-white text-black text-sm font-semibold uppercase tracking-widest px-8 py-3 hover:bg-yellow-600 hover:text-white transition-colors duration-300"
+              className="inline-block bg-white text-black text-sm font-semibold uppercase tracking-widest px-8 py-3 hover:bg-yellow-600 hover:text-white transition-colors duration-300 rounded-[10px]"
             >
               Pogledaj kolekciju
             </a>

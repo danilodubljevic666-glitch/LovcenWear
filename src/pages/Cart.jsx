@@ -1,25 +1,43 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import emailjs from '@emailjs/browser'
 import { useCart } from '../context/CartContext'
 
 const CUSTOMIZATION_FEE = 3
+const WHATSAPP_NUMBER = '38269XXXXXXX' // <-- unesi svoj WhatsApp broj (bez + i razmaka)
 
 const itemTotal = (item) => {
   const extras = (item.customization?.prezimeRukav ? 1 : 0) + (item.customization?.prezimeLedjima ? 1 : 0)
   return item.qty * item.product.price + item.qty * extras * CUSTOMIZATION_FEE
 }
 
-const SERVICE_ID        = 'service_35t1kg4'
-const ORDER_TEMPLATE_ID = 'template_jhrvu48'
-const PUBLIC_KEY        = 'ASltbUGew2GCqRWiC'
-const GITHUB_BASE       = 'https://raw.githubusercontent.com/danilodubljevic666-glitch/LovcenWear/main/public'
+function buildWhatsAppMessage(form, items) {
+  const ukupno = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
+  const stavke = items.map((i) => {
+    let line = `• ${i.product.name} | ${i.color.name} | ${i.size} | ${i.qty}kom | ${itemTotal(i).toFixed(2)}€`
+    if (i.customization?.prezimeLedjima) line += `\n  Leđa: ${i.customization.prezimeLedjima}`
+    if (i.customization?.prezimeRukav)   line += `\n  Rukav: ${i.customization.prezimeRukav}`
+    return line
+  }).join('\n')
+
+  return [
+    `Nova narudžba – LovcenWear`,
+    ``,
+    `Ime: ${form.ime} ${form.prezime}`,
+    `Tel: ${form.telefon}`,
+    `Grad: ${form.grad}`,
+    `Adresa: ${form.adresa}`,
+    ``,
+    `Artikli:`,
+    stavke,
+    ``,
+    `Ukupno: ${ukupno}€`,
+  ].join('\n')
+}
 
 function OrderModal({ items, onClose, onSuccess }) {
-  const [form, setForm]       = useState({ ime: '', prezime: '', telefon: '', grad: '', adresa: '' })
-  const [errors, setErrors]   = useState({})
-  const [status, setStatus]   = useState('idle') // idle | sending | success | error
-  const [errMsg, setErrMsg]   = useState('')
+  const [form, setForm]     = useState({ ime: '', prezime: '', telefon: '', grad: '', adresa: '' })
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState('idle') // idle | sending | success
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -36,42 +54,17 @@ function OrderModal({ items, onClose, onSuccess }) {
     return e
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     const e2 = validate()
     if (Object.keys(e2).length > 0) { setErrors(e2); return }
 
-    setStatus('sending')
-    const first  = items[0]
-    const ukupno = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
-    const stavke = items.map((i) => {
-      let line = `• ${i.product.name} | Boja: ${i.color.name} | Veličina: ${i.size} | Kom: ${i.qty}`
-      if (i.customization?.prezimeLedjima) line += ` | Prezime na leđima: ${i.customization.prezimeLedjima}`
-      if (i.customization?.prezimeRukav) line += ` | Prezime na rukavu: ${i.customization.prezimeRukav}`
-      return line
-    }).join('\n')
+    const message = buildWhatsAppMessage(form, items)
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    window.open(url, '_blank', 'noopener,noreferrer')
 
-    try {
-      await emailjs.send(SERVICE_ID, ORDER_TEMPLATE_ID, {
-        customer_name: `${form.ime} ${form.prezime}`,
-        phone:         form.telefon,
-        city:          form.grad,
-        address:       form.adresa,
-        product_name:  items.length === 1 ? first.product.name : `${items.length} artikla`,
-        color:         first.color.name,
-        size:          first.size,
-        qty:           items.reduce((s, i) => s + i.qty, 0),
-        order_details: stavke,
-        total:         ukupno,
-        product_image: `${GITHUB_BASE}/majice/${encodeURIComponent(first.product.folder)}/${encodeURIComponent(first.color.file)}`,
-      }, { publicKey: PUBLIC_KEY })
-      setStatus('success')
-      onSuccess()
-    } catch (err) {
-      console.error('EmailJS order error:', err)
-      setErrMsg(err?.text || err?.message || 'Nepoznata greška')
-      setStatus('error')
-    }
+    setStatus('success')
+    onSuccess()
   }
 
   return (
@@ -85,12 +78,13 @@ function OrderModal({ items, onClose, onSuccess }) {
         {status === 'success' ? (
           <div className="flex flex-col items-center justify-center gap-4 px-8 py-12 text-center">
             <div className="w-14 h-14 rounded-full bg-green-600/20 flex items-center justify-center">
-              <svg className="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg className="w-7 h-7 text-green-400" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.413A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.952 7.952 0 01-4.045-1.104l-.29-.173-2.956.839.84-2.881-.19-.297A7.963 7.963 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/>
               </svg>
             </div>
-            <h3 className="text-white text-lg font-semibold">Narudžba primljena!</h3>
-            <p className="text-white/50 text-sm">Javićemo vam se uskoro na broj koji ste naveli.</p>
+            <h3 className="text-white text-lg font-semibold">WhatsApp otvoren!</h3>
+            <p className="text-white/50 text-sm">Poruka sa narudžbom je pripremljena. Samo pritisni "Pošalji" u WhatsApp-u.</p>
             <button onClick={onClose}
               className="mt-2 bg-white text-black text-sm font-semibold uppercase tracking-widest px-8 py-3 hover:bg-yellow-500 transition-colors rounded-sm cursor-pointer">
               Zatvori
@@ -166,14 +160,14 @@ function OrderModal({ items, onClose, onSuccess }) {
                 {errors.adresa && <p className="text-red-400 text-xs mt-1">{errors.adresa}</p>}
               </div>
 
-              <button type="submit" disabled={status === 'sending'}
-                className="mt-1 w-full bg-white text-black text-sm font-semibold uppercase tracking-widest py-3 hover:bg-yellow-500 transition-colors duration-300 rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                {status === 'sending' ? 'Šalje se...' : 'Potvrdi narudžbu'}
+              <button type="submit"
+                className="mt-1 w-full bg-[#25D366] text-white text-sm font-semibold uppercase tracking-widest py-3 hover:bg-[#1ebe59] transition-colors duration-300 rounded-sm cursor-pointer flex items-center justify-center gap-2">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                  <path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.413A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.952 7.952 0 01-4.045-1.104l-.29-.173-2.956.839.84-2.881-.19-.297A7.963 7.963 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/>
+                </svg>
+                Naruči putem WhatsApp-a
               </button>
-
-              {status === 'error' && (
-                <p className="text-red-400 text-xs text-center">Greška: {errMsg}</p>
-              )}
             </form>
           </>
         )}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import emailjs from '@emailjs/browser'
 import { useCart } from '../context/CartContext'
 
-const CUSTOMIZATION_FEE = 3
+const CUSTOMIZATION_FEE = 2
 
 const itemTotal = (item) => {
   const extras = (item.customization?.prezimeRukav ? 1 : 0) + (item.customization?.prezimeLedjima ? 1 : 0)

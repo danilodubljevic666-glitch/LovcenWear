@@ -30,6 +30,7 @@ export default function ProductDetail() {
 
   const [selectedColor, setSelectedColor] = useState(0)
   const [selectedSize, setSelectedSize] = useState(null)
+  const [xsOpen, setXsOpen] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
   const [toast, setToast] = useState(null)
   const [addRukav, setAddRukav] = useState(false)
@@ -180,20 +181,59 @@ export default function ProductDetail() {
               Veličina {selectedSize ? <span className="text-white">— {selectedSize}</span> : <span className="text-white/30">(izaberi)</span>}
             </p>
             <div className="flex flex-wrap gap-2">
-              {sizes.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  className={`w-14 h-14 text-sm font-semibold border transition-all duration-200 cursor-pointer rounded-sm
-                    ${selectedSize === size
-                      ? 'bg-yellow-500 border-yellow-500 text-black'
-                      : 'bg-transparent border-white/20 text-white/70 hover:border-white hover:text-white'
-                    }`}
-                >
-                  {size}
-                </button>
-              ))}
+              {sizes.map((size) => {
+                const isXs = size === 'XS'
+                const isActive = isXs
+                  ? (xsOpen || selectedSize?.startsWith('Dječija'))
+                  : selectedSize === size
+                return (
+                  <button
+                    key={size}
+                    onClick={() => {
+                      if (isXs) {
+                        setXsOpen(true)
+                        setSelectedSize(null)
+                      } else {
+                        setSelectedSize(size)
+                        setXsOpen(false)
+                      }
+                    }}
+                    className={`w-14 h-14 text-sm font-semibold border transition-all duration-200 cursor-pointer rounded-sm
+                      ${isActive
+                        ? 'bg-yellow-500 border-yellow-500 text-black'
+                        : 'bg-transparent border-white/20 text-white/70 hover:border-white hover:text-white'
+                      }`}
+                  >
+                    {isXs ? 'Dječije' : size}
+                  </button>
+                )
+              })}
             </div>
+
+            {/* Child age picker */}
+            {xsOpen && (
+              <div className="mt-4">
+                <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Uzrast djeteta</p>
+                <div className="flex flex-wrap gap-2">
+                  {[3,4,5,6,7,8,9,10,11,12,13,14].map((age) => {
+                    const val = `Dječija (${age} god.)`
+                    return (
+                      <button
+                        key={age}
+                        onClick={() => { setSelectedSize(val); setXsOpen(false) }}
+                        className={`px-3 h-10 text-sm font-semibold border transition-all duration-200 cursor-pointer rounded-sm
+                          ${selectedSize === val
+                            ? 'bg-yellow-500 border-yellow-500 text-black'
+                            : 'bg-transparent border-white/20 text-white/70 hover:border-white hover:text-white'
+                          }`}
+                      >
+                        {age} god.
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Customization */}
@@ -219,7 +259,7 @@ export default function ProductDetail() {
                   onClick={() => { setAddLedjima((v) => !v); setPrezimeLedjimaError(false); setPrezimeLedjima('') }}
                 >
                   Dodajte prezime (ili ime) na leđima majice
-                  <span className="text-yellow-500 font-semibold ml-1">+3€</span>
+                  <span className="text-yellow-500 font-semibold ml-1">+2€</span>
                 </span>
               </label>
               {addLedjima && (
@@ -256,7 +296,7 @@ export default function ProductDetail() {
                   onClick={() => { setAddRukav((v) => !v); setPrezimeRukavError(false); setPrezimeRukav('') }}
                 >
                   Dodajte prezime (ili ime) na rukav majice
-                  <span className="text-yellow-500 font-semibold ml-1">+3€</span>
+                  <span className="text-yellow-500 font-semibold ml-1">+2€</span>
                 </span>
               </label>
               {addRukav && (

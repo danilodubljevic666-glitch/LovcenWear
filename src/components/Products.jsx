@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useRef, useState, useEffect } from 'react'
 import { products, ORIGINAL_PRICE } from '../data/products'
 
 function ProductCard({ product }) {
@@ -44,8 +45,27 @@ function ProductCard({ product }) {
 }
 
 export default function Products() {
+  const sectionRef = useRef(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(false)
+          requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)))
+        } else {
+          setVisible(false)
+        }
+      },
+      { threshold: 0.1 }
+    )
+    if (sectionRef.current) observer.observe(sectionRef.current)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section id="majice" className="bg-zinc-950 py-20 px-4 sm:px-6 lg:px-8">
+    <section ref={sectionRef} id="majice" className="bg-zinc-950 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14">
           <h2 className="text-white text-3xl sm:text-4xl font-bold tracking-tight">
@@ -59,7 +79,16 @@ export default function Products() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {products.map((product, index) => (
-            <div key={product.id} className="flex flex-col gap-1.5">
+            <div
+              key={product.id}
+              className="flex flex-col gap-1.5"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(40px)',
+                transition: 'opacity 0.6s ease, transform 0.6s ease',
+                transitionDelay: visible ? `${index * 60}ms` : '0ms',
+              }}
+            >
               <ProductCard product={product} />
               {index === 0 && (
                 <p className="text-red-500 text-xs font-semibold text-center tracking-wide"

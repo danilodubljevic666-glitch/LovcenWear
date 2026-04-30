@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const heroShirts = [
-  { src: '/majice/Ultras majica/Ultras bijela.png',   alt: 'Ultras majica',  direction: 'left',  imgScale: 'scale-[0.85]' },
-  { src: '/majice/20 godina premium majica/20 godina crna.png', alt: '20 godina premium majica', direction: 'right', imgScale: '' },
+  { src: '/majice/20 godina premium majica/20 godina crna.png', alt: '20 godina premium majica', direction: 'left',  imgScale: 'scale-[0.85]' },
+  { src: '/majice/Premium majica/crvena premium.png',           alt: 'Premium majica',           direction: 'right', imgScale: '' },
 ]
 
 const titleStyle = {

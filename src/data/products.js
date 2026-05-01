@@ -18,7 +18,7 @@ export const products = [
   { id: 'polo-majica',              name: 'Polo Majica',              price: 24.99, folder: 'Polo majica',
     colors: [
       { name: 'Crna',   file: 'Polo majica crna.png',  swatch: '#1a1a1a' },
-      { name: 'Bijela', file: 'Polo majica bijela.png', swatch: '#f5f5f5' },
+      { name: 'Bijela', file: 'Polo majica bijela 2.png', swatch: '#f5f5f5' },
     ],
   },
   { id: 'ultras-majica',            name: 'Ultras Majica',            price: 19.99, folder: 'Ultras majica',

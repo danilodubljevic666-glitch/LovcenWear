@@ -1,13 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
-export default function Preloader({ onDone }) {
-  const [stage, setStage] = useState('visible') // visible | fading
+export default function Preloader({ onDone, imagesReady = false }) {
+  const [minTimePassed, setMinTimePassed] = useState(false)
+  const [stage, setStage] = useState('visible')
+  const doneCalledRef = useRef(false)
+
+  const triggerDone = useCallback(() => {
+    if (doneCalledRef.current) return
+    doneCalledRef.current = true
+    setStage('fading')
+    setTimeout(() => onDone(), 600)
+  }, [onDone])
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setStage('fading'), 1800)
-    const doneTimer = setTimeout(() => onDone(), 2400)
-    return () => { clearTimeout(fadeTimer); clearTimeout(doneTimer) }
-  }, [onDone])
+    const minTimer = setTimeout(() => setMinTimePassed(true), 1800)
+    const safetyTimer = setTimeout(() => triggerDone(), 7000)
+    return () => { clearTimeout(minTimer); clearTimeout(safetyTimer) }
+  }, [triggerDone])
+
+  useEffect(() => {
+    if (minTimePassed && imagesReady) triggerDone()
+  }, [minTimePassed, imagesReady, triggerDone])
 
   return (
     <div
@@ -26,7 +39,7 @@ export default function Preloader({ onDone }) {
         <div
           className="h-full bg-yellow-500 rounded-full"
           style={{
-            animation: 'loadbar 1.6s ease-in-out forwards',
+            animation: 'loadbar 4s ease-out forwards',
           }}
         />
       </div>
@@ -34,8 +47,7 @@ export default function Preloader({ onDone }) {
       <style>{`
         @keyframes loadbar {
           0%   { width: 0% }
-          60%  { width: 80% }
-          100% { width: 100% }
+          100% { width: 88% }
         }
       `}</style>
     </div>

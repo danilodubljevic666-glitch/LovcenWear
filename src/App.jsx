@@ -47,9 +47,27 @@ function HomePage({ ready }) {
   )
 }
 
+const HERO_SRCS = [
+  '/majice/20 godina premium majica/20 godina crvena.png',
+  '/majice/Premium majica/crvena premium.png',
+]
+
 function App() {
   const [loading, setLoading] = useState(true)
   const [ready, setReady] = useState(false)
+  const [imagesReady, setImagesReady] = useState(false)
+
+  useEffect(() => {
+    let count = 0
+    HERO_SRCS.forEach(src => {
+      const img = new Image()
+      img.onload = img.onerror = () => {
+        if (++count === HERO_SRCS.length) setImagesReady(true)
+      }
+      img.src = src
+    })
+  }, [])
+
   const handleDone = useCallback(() => {
     setLoading(false)
     setReady(true)
@@ -58,7 +76,7 @@ function App() {
   return (
     <BrowserRouter>
       <CartProvider>
-        {loading && <Preloader onDone={handleDone} />}
+        {loading && <Preloader onDone={handleDone} imagesReady={imagesReady} />}
         <ScrollToTop />
         <div style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.4s ease' }}>
           <Routes>

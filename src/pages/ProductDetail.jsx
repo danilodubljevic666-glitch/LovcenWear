@@ -183,6 +183,7 @@ export default function ProductDetail() {
             <div className="flex flex-wrap gap-2">
               {sizes.map((size) => {
                 const isXs = size === 'XS'
+                if (isXs && isPolo) return null
                 const isActive = isXs
                   ? (xsOpen || selectedSize?.startsWith('Dječija'))
                   : selectedSize === size
@@ -211,7 +212,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Child age picker */}
-            {xsOpen && (
+            {xsOpen && !isPolo && (
               <div className="mt-4">
                 <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Uzrast djeteta</p>
                 <div className="flex flex-wrap gap-2">

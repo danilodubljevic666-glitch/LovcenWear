@@ -83,6 +83,13 @@ export const products = [
       { name: 'Crna',   file: 'Mne majica.png',        swatch: '#1a1a1a' },
     ],
   },
+  { id: 'crnogorske-casual',        name: 'Crnogorske Casual',        price: 14.99, originalPrice: 20, folder: 'Crnogorske casual',
+    colors: [
+      { name: 'Bijela',  file: 'bijela.png',  swatch: '#f5f5f5' },
+      { name: 'Crna',    file: 'crna.png',    swatch: '#1a1a1a' },
+      { name: 'Crvena',  file: 'crvena.png',  swatch: '#DC2626' },
+    ],
+  },
 ]
 
 export const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']

@@ -15,7 +15,7 @@ export const products = [
       { name: 'Bijela', file: '20 godina bijela.png', swatch: '#f5f5f5' },
     ],
   },
-  { id: 'polo-majica',              name: 'Polo Majica',              price: 24.99, folder: 'Polo majica',
+  { id: 'polo-majica',              name: 'Polo Majica',              price: 24.99, folder: 'Polo majica', noChildSizes: true,
     colors: [
       { name: 'Crna',   file: 'Polo majica crna.png',  swatch: '#1a1a1a' },
       { name: 'Bijela', file: 'Polo majica bijela 2.png', swatch: '#f5f5f5' },
@@ -81,6 +81,12 @@ export const products = [
     colors: [
       { name: 'Bijela', file: 'mne majica bijela.png', swatch: '#f5f5f5' },
       { name: 'Crna',   file: 'Mne majica.png',        swatch: '#1a1a1a' },
+    ],
+  },
+  { id: 'polo-vjecna-majica',       name: 'Polo(da je vječna) majica', price: 25, noChildSizes: true, folder: 'Polo(da je vjecna) majica',
+    colors: [
+      { name: 'Bijela', file: 'bijelaa.png', swatch: '#f5f5f5' },
+      { name: 'Crna',   file: 'crnaa.png',   swatch: '#1a1a1a' },
     ],
   },
   { id: 'crnogorske-casual',        name: 'Crnogorske Casual',        price: 14.99, originalPrice: 20, folder: 'Crnogorske casual',

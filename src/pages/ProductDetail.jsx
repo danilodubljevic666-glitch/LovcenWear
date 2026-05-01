@@ -56,7 +56,7 @@ export default function ProductDetail() {
   // Dynamic background: dark bg for light shirts, light bg for dark shirts
   const imgBg = lightShirt ? 'bg-zinc-700' : 'bg-zinc-200'
 
-  const isPolo = product.id === 'polo-majica'
+  const noChildSizes = !!product.noChildSizes
   const displayOriginalPrice = product.originalPrice ?? ORIGINAL_PRICE
 
   const customization = (() => {
@@ -184,7 +184,7 @@ export default function ProductDetail() {
             <div className="flex flex-wrap gap-2">
               {sizes.map((size) => {
                 const isXs = size === 'XS'
-                if (isXs && isPolo) return null
+                if (isXs && noChildSizes) return null
                 const isActive = isXs
                   ? (xsOpen || selectedSize?.startsWith('Dječija'))
                   : selectedSize === size
@@ -213,7 +213,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Child age picker */}
-            {xsOpen && !isPolo && (
+            {xsOpen && !noChildSizes && (
               <div className="mt-4">
                 <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Uzrast djeteta</p>
                 <div className="flex flex-wrap gap-2">

@@ -35,6 +35,12 @@ export const products = [
       { name: 'Zelena/Crna',  file: 'krstas zeleni crna.png', swatch: '#14532d' },
     ],
   },
+  { id: 'krstas-black-and-white',   name: 'Krstaš Black & White',     price: 20, originalPrice: 25, folder: 'krstas black and white',
+    colors: [
+      { name: 'Bijela', file: 'bijela.png', swatch: '#f5f5f5' },
+      { name: 'Crna',   file: 'crna.png',   swatch: '#1a1a1a' },
+    ],
+  },
   { id: 'vijenac-majica',           name: 'Vijenac Majica',           price: 19.99, folder: 'Vijenac majica',
     colors: [
       { name: 'Bijela', file: 'vijenac bijeli png.png', swatch: '#f5f5f5' },

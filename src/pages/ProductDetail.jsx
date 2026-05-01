@@ -57,6 +57,7 @@ export default function ProductDetail() {
   const imgBg = lightShirt ? 'bg-zinc-700' : 'bg-zinc-200'
 
   const isPolo = product.id === 'polo-majica'
+  const displayOriginalPrice = product.originalPrice ?? ORIGINAL_PRICE
 
   const customization = (() => {
     const c = {}
@@ -141,10 +142,10 @@ export default function ProductDetail() {
               {product.name}
             </h1>
             <div className="flex items-center gap-3 mt-4">
-              <span className="text-white/40 text-lg line-through">{ORIGINAL_PRICE.toFixed(2)}€</span>
+              <span className="text-white/40 text-lg line-through">{displayOriginalPrice.toFixed(2)}€</span>
               <span className="text-yellow-500 text-2xl font-bold">{product.price.toFixed(2)}€</span>
               <span className="bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-sm uppercase tracking-wide">
-                -{Math.round((1 - product.price / ORIGINAL_PRICE) * 100)}%
+                -{Math.round((1 - product.price / displayOriginalPrice) * 100)}%
               </span>
             </div>
           </div>

@@ -36,7 +36,7 @@ function ProductCard({ product }) {
           ))}
         </div>
         <div className="flex items-center justify-center gap-2 mt-3">
-          <span className="text-white/40 text-sm line-through">{ORIGINAL_PRICE.toFixed(2)}€</span>
+          <span className="text-white/40 text-sm line-through">{(product.originalPrice ?? ORIGINAL_PRICE).toFixed(2)}€</span>
           <span className="text-yellow-500 font-semibold text-base">{product.price.toFixed(2)}€</span>
         </div>
       </div>

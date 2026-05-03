@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import emailjs from '@emailjs/browser'
 import { useCart } from '../context/CartContext'
 
-const CUSTOMIZATION_FEE = 2
+const FEE_LEDJA = 3
+const FEE_RUKAV = 2
 
 const itemTotal = (item) => {
-  const extras = (item.customization?.prezimeRukav ? 1 : 0) + (item.customization?.prezimeLedjima ? 1 : 0)
-  return item.qty * item.product.price + item.qty * extras * CUSTOMIZATION_FEE
+  const ledja = item.customization?.prezimeLedjima ? FEE_LEDJA : 0
+  const rukav = item.customization?.prezimeRukav ? FEE_RUKAV : 0
+  return item.qty * item.product.price + item.qty * (ledja + rukav)
 }
 
 const SERVICE_ID        = 'service_35t1kg4'
@@ -53,17 +55,16 @@ function OrderModal({ items, onClose, onSuccess }) {
 
     try {
       await emailjs.send(SERVICE_ID, ORDER_TEMPLATE_ID, {
-        customer_name: `${form.ime} ${form.prezime}`,
-        phone:         form.telefon,
-        city:          form.grad,
-        address:       form.adresa,
-        product_name:  items.length === 1 ? first.product.name : `${items.length} artikla`,
-        color:         first.color.name,
-        size:          first.size,
-        qty:           items.reduce((s, i) => s + i.qty, 0),
-        order_details: stavke,
-        total:         ukupno,
-        product_image: `${GITHUB_BASE}/majice/${encodeURIComponent(first.product.folder)}/${encodeURIComponent(first.color.file)}`,
+        from_name:  `${form.ime} ${form.prezime}`,
+        from_email: form.telefon,
+        message:
+          `NOVA NARUDŽBA\n\n` +
+          `Kupac: ${form.ime} ${form.prezime}\n` +
+          `Telefon: ${form.telefon}\n` +
+          `Grad: ${form.grad}\n` +
+          `Adresa: ${form.adresa}\n\n` +
+          `Artikli:\n${stavke}\n\n` +
+          `Ukupno: ${ukupno}€`,
       }, { publicKey: PUBLIC_KEY })
       setStatus('success')
       onSuccess()

@@ -261,7 +261,7 @@ export default function ProductDetail() {
                   onClick={() => { setAddLedjima((v) => !v); setPrezimeLedjimaError(false); setPrezimeLedjima('') }}
                 >
                   Dodajte prezime (ili ime) na leđima majice
-                  <span className="text-yellow-500 font-semibold ml-1">+2€</span>
+                  <span className="text-yellow-500 font-semibold ml-1">+3€</span>
                 </span>
               </label>
               {addLedjima && (

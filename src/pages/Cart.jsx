@@ -13,7 +13,7 @@ const itemTotal = (item) => {
 }
 
 const SERVICE_ID        = 'service_35t1kg4'
-const ORDER_TEMPLATE_ID = 'template_jhrvu48'
+const ORDER_TEMPLATE_ID = 'e1mzryk'
 const PUBLIC_KEY        = 'ASltbUGew2GCqRWiC'
 const GITHUB_BASE       = 'https://raw.githubusercontent.com/danilodubljevic666-glitch/LovcenWear/main/public'
 
@@ -54,17 +54,27 @@ function OrderModal({ items, onClose, onSuccess }) {
     }).join('\n')
 
     try {
+      const custDetails = []
+      if (items.length > 1) custDetails.push(stavke)
+      else {
+        if (first.customization?.prezimeLedjima) custDetails.push(`Prezime na leđima: ${first.customization.prezimeLedjima}`)
+        if (first.customization?.prezimeRukav)   custDetails.push(`Prezime na rukavu: ${first.customization.prezimeRukav}`)
+      }
+
       await emailjs.send(SERVICE_ID, ORDER_TEMPLATE_ID, {
-        from_name:  `${form.ime} ${form.prezime}`,
-        from_email: form.telefon,
-        message:
-          `NOVA NARUDŽBA\n\n` +
-          `Kupac: ${form.ime} ${form.prezime}\n` +
-          `Telefon: ${form.telefon}\n` +
-          `Grad: ${form.grad}\n` +
-          `Adresa: ${form.adresa}\n\n` +
-          `Artikli:\n${stavke}\n\n` +
-          `Ukupno: ${ukupno}€`,
+        customer_name:  `${form.ime} ${form.prezime}`,
+        name:           `${form.ime} ${form.prezime}`,
+        email:          form.telefon,
+        phone:          form.telefon,
+        city:           form.grad,
+        address:        form.adresa,
+        product_name:   first.product.name,
+        product_image:  `${GITHUB_BASE}/majice/${first.product.folder}/${first.color.file}`,
+        color:          items.length === 1 ? first.color.name : items.map(i => i.color.name).join(', '),
+        size:           items.length === 1 ? first.size       : items.map(i => i.size).join(', '),
+        qty:            items.reduce((s, i) => s + i.qty, 0).toString(),
+        order_details:  custDetails.join('\n'),
+        total:          ukupno,
       }, { publicKey: PUBLIC_KEY })
       setStatus('success')
       onSuccess()

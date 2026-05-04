@@ -13,7 +13,7 @@ const itemTotal = (item) => {
 }
 
 const SERVICE_ID        = 'service_35t1kg4'
-const ORDER_TEMPLATE_ID = 'e1mzryk'
+const ORDER_TEMPLATE_ID = 'template_jhrvu48'
 const PUBLIC_KEY        = 'ASltbUGew2GCqRWiC'
 const GITHUB_BASE       = 'https://raw.githubusercontent.com/danilodubljevic666-glitch/LovcenWear/main/public'
 

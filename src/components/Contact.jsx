@@ -10,7 +10,7 @@ import emailjs from '@emailjs/browser'
 // 4. Account → General → Public Key → kopiraj
 // -------------------------------------------------------------------
 const SERVICE_ID  = 'service_35t1kg4'
-const TEMPLATE_ID = 'template_jhrvu48'
+const TEMPLATE_ID = 'template_i78l4cc'
 const PUBLIC_KEY  = 'ASltbUGew2GCqRWiC'
 
 export default function Contact() {

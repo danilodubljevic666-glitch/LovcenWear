@@ -69,9 +69,7 @@ function OrderModal({ items, onClose, onSuccess }) {
         city:           form.grad,
         address:        form.adresa,
         product_name:   items.map(i => i.product.name).join(', '),
-        images_html:    items.map(i =>
-          `<img src="${GITHUB_BASE}/majice/${encodeURIComponent(i.product.folder)}/${encodeURIComponent(i.color.file)}" alt="${i.product.name}" style="max-height:160px;max-width:45%;object-fit:contain;margin:0 8px;" />`
-        ).join(''),
+        product_image:  `${GITHUB_BASE}/majice/${encodeURIComponent(first.product.folder)}/${encodeURIComponent(first.color.file)}`,
         color:          items.length === 1 ? first.color.name : items.map(i => i.color.name).join(', '),
         size:           items.length === 1 ? first.size       : items.map(i => i.size).join(', '),
         qty:            items.reduce((s, i) => s + i.qty, 0).toString(),

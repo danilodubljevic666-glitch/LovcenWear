@@ -27,7 +27,7 @@ export const products = [
       { name: 'Bijela', file: 'Ultras bijela.png',  swatch: '#f5f5f5' },
     ],
   },
-  { id: 'polo-premium-majica',       name: 'Polo Premium Majica',      price: 25, noChildSizes: true, folder: 'polo premium majica',
+  { id: 'polo-premium-majica',       name: 'Polo Premium Majica',      price: 25, noChildSizes: true, noBackText: true, folder: 'polo premium majica',
     colors: [
       { name: 'Crvena', file: 'crvena 1.png', swatch: '#DC2626' },
       { name: 'Crna',   file: 'crna 1.png',   swatch: '#1a1a1a' },

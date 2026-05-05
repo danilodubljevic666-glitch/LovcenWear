@@ -57,6 +57,7 @@ export default function ProductDetail() {
   const imgBg = lightShirt ? 'bg-zinc-700' : 'bg-zinc-200'
 
   const noChildSizes = !!product.noChildSizes
+  const noBackText = !!product.noBackText
   const displayOriginalPrice = product.originalPrice ?? ORIGINAL_PRICE
 
   const customization = (() => {
@@ -242,8 +243,8 @@ export default function ProductDetail() {
           <div className="flex flex-col gap-4">
             <p className="text-white/40 text-xs uppercase tracking-widest">Personalizacija</p>
 
-            {/* Prezime na leđima — sve majice */}
-            <div className="flex flex-col gap-2">
+            {/* Prezime na leđima — sve majice osim onih sa noBackText */}
+            {!noBackText && <div className="flex flex-col gap-2">
               <label className="flex items-center gap-3 cursor-pointer group">
                 <div
                   onClick={() => { setAddLedjima((v) => !v); setPrezimeLedjimaError(false); setPrezimeLedjima('') }}
@@ -277,7 +278,7 @@ export default function ProductDetail() {
                   {prezimeLedjimaError && <p className="text-red-400 text-xs mt-1">Unesite prezime ili uklonite kvačicu</p>}
                 </div>
               )}
-            </div>
+            </div>}
 
             {/* Prezime na rukavu — sve majice */}
             <div className="flex flex-col gap-2">

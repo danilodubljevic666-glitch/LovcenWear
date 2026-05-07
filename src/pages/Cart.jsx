@@ -45,7 +45,7 @@ function OrderModal({ items, onClose, onSuccess }) {
 
     setStatus('sending')
     const first  = items[0]
-    const ukupno = (items.reduce((s, i) => s + itemTotal(i), 0) + 4).toFixed(2)
+    const ukupno = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
     const stavke = items.map((i) => {
       let line = `• ${i.product.name} | Boja: ${i.color.name} | Veličina: ${i.size} | Kom: ${i.qty}`
       if (i.customization?.prezimeLedjima) line += ` | Prezime na leđima: ${i.customization.prezimeLedjima}`

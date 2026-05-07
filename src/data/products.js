@@ -96,6 +96,13 @@ export const products = [
       { name: 'Crna',   file: 'crnaa.png',   swatch: '#1a1a1a' },
     ],
   },
+  { id: 'casual-majica-2',          name: 'Casual Majica 2',          price: 14.99, folder: 'casual majice 2',
+    colors: [
+      { name: 'Crna',   file: 'crna.png',    swatch: '#1a1a1a' },
+      { name: 'Bijela', file: 'bijela.png',  swatch: '#f5f5f5' },
+      { name: 'Crvena', file: 'crvena.png',  swatch: '#DC2626' },
+    ],
+  },
   { id: 'crnogorske-casual',        name: 'Crnogorske Casual',        price: 14.99, originalPrice: 20, folder: 'Crnogorske casual',
     colors: [
       { name: 'Bijela',  file: 'bijela.png',  swatch: '#f5f5f5' },

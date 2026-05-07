@@ -299,7 +299,7 @@ export default function ProductDetail() {
                   onClick={() => { setAddRukav((v) => !v); setPrezimeRukavError(false); setPrezimeRukav('') }}
                 >
                   Dodajte prezime (ili ime) na rukav majice
-                  <span className="text-yellow-500 font-semibold ml-1">+2€</span>
+                  <span className="text-yellow-500 font-semibold ml-1">+3€</span>
                 </span>
               </label>
               {addRukav && (

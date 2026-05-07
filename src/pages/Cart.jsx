@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser'
 import { useCart } from '../context/CartContext'
 
 const FEE_LEDJA = 3
-const FEE_RUKAV = 2
+const FEE_RUKAV = 3
 
 const itemTotal = (item) => {
   const ledja = item.customization?.prezimeLedjima ? FEE_LEDJA : 0

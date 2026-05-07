@@ -29,9 +29,9 @@ export const products = [
   },
   { id: 'polo-premium-majica',       name: 'Polo Premium Majica',      price: 25, noChildSizes: true, noBackText: true, folder: 'polo premium majica',
     colors: [
-      { name: 'Crvena', file: 'crvena 1.png', swatch: '#DC2626' },
-      { name: 'Crna',   file: 'crna 1.png',   swatch: '#1a1a1a' },
-      { name: 'Bijela', file: 'bijela 1.png',  swatch: '#f5f5f5' },
+      { name: 'Crvena', file: 'boss1.png', swatch: '#DC2626' },
+      { name: 'Crna',   file: 'boss2.png', swatch: '#1a1a1a' },
+      { name: 'Bijela', file: 'boss3.png', swatch: '#f5f5f5' },
     ],
   },
   { id: 'krstas-majica',            name: 'Krstaš Majica',            price: 19.99, folder: 'Krstas majica',

@@ -45,7 +45,7 @@ function OrderModal({ items, onClose, onSuccess }) {
 
     setStatus('sending')
     const first  = items[0]
-    const ukupno = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
+    const ukupno = (items.reduce((s, i) => s + itemTotal(i), 0) + 4).toFixed(2)
     const stavke = items.map((i) => {
       let line = `• ${i.product.name} | Boja: ${i.color.name} | Veličina: ${i.size} | Kom: ${i.qty}`
       if (i.customization?.prezimeLedjima) line += ` | Prezime na leđima: ${i.customization.prezimeLedjima}`
@@ -197,7 +197,8 @@ export default function Cart() {
   const { items, removeItem, updateQty, clearCart } = useCart()
   const [showModal, setShowModal] = useState(false)
 
-  const total = items.reduce((s, i) => s + itemTotal(i), 0).toFixed(2)
+  const subtotal = items.reduce((s, i) => s + itemTotal(i), 0)
+  const total = (subtotal + 4).toFixed(2)
 
   return (
     <div className="min-h-screen bg-black">
@@ -286,14 +287,19 @@ export default function Cart() {
                 <span className="text-white text-sm">{items.reduce((s, i) => s + i.qty, 0)} kom</span>
               </div>
               <div className="flex justify-between items-center border-t border-white/10 pt-4">
+                <span className="text-white/50 text-sm">Cijena majica</span>
+                <span className="text-white text-sm font-medium">{subtotal.toFixed(2)}€</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-white/50 text-sm">Dostava</span>
+                <span className="text-white text-sm font-medium">+4.00€</span>
+              </div>
+              <div className="flex justify-between items-center border-t border-white/10 pt-4">
                 <span className="text-white font-semibold">Ukupno</span>
                 <span className="text-yellow-500 text-xl font-bold">{total}€</span>
               </div>
 
               <div className="bg-zinc-800 rounded-sm px-4 py-3 flex flex-col gap-1 border border-white/5">
-                <p className="text-white/70 text-xs leading-relaxed">
-                  <span className="text-yellow-500 font-semibold">Dostava za sve gradove 4€.</span> Važi samo za gradove Crne Gore.
-                </p>
                 <p className="text-white/50 text-xs leading-relaxed">
                   Majice će biti pripremljene i isporučene u roku od 3–5 radnih dana.
                 </p>

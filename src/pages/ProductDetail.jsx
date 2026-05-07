@@ -115,7 +115,7 @@ export default function ProductDetail() {
       <div className="pt-16 min-h-screen flex flex-col lg:flex-row">
 
         {/* Image panel — dynamic bg */}
-        <div className={`lg:w-1/2 ${imgBg} flex items-center justify-center p-8 sm:p-16 min-h-[50vh] lg:min-h-screen lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] transition-colors duration-300`}>
+        <div className={`lg:w-1/2 ${imgBg} flex items-center justify-center ${product.id === 'polo-premium-majica' ? 'p-4 sm:p-8' : 'p-8 sm:p-16'} min-h-[50vh] lg:min-h-screen lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] transition-colors duration-300`}>
           <div className="relative w-full max-w-sm">
             {!imgLoaded && (
               <div className="absolute inset-0 flex items-center justify-center">

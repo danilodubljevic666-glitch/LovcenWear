@@ -11,7 +11,7 @@ function ProductCard({ product }) {
       to={`/majica/${product.id}`}
       className="group cursor-pointer bg-zinc-900 hover:bg-zinc-800 transition-colors duration-300 rounded-sm overflow-hidden block"
     >
-      <div className="aspect-square bg-zinc-200 flex items-center justify-center p-6 overflow-hidden relative">
+      <div className={`aspect-square bg-zinc-200 flex items-center justify-center ${product.id === 'polo-premium-majica' ? 'p-2' : 'p-6'} overflow-hidden relative`}>
         <div className="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-2.5 py-1 z-10">
           Popust
         </div>

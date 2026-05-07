@@ -42,7 +42,7 @@ export const products = [
       { name: 'Zelena/Crna',  file: 'krstas zeleni crna.png', swatch: '#14532d' },
     ],
   },
-  { id: 'krstas-black-and-white',   name: 'Krstaš Black & White',     price: 20, originalPrice: 25, folder: 'krstas black and white',
+  { id: 'krstas-black-and-white',   name: 'Krstaš Black & White',     price: 19.99, originalPrice: 25, folder: 'krstas black and white',
     colors: [
       { name: 'Crna',   file: 'crna.png',   swatch: '#1a1a1a' },
       { name: 'Bijela', file: 'bijela.png', swatch: '#f5f5f5' },

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useRef, useState, useEffect } from 'react'
-import { products, ORIGINAL_PRICE } from '../data/products'
+import { products, kacketi, ORIGINAL_PRICE } from '../data/products'
 
 function ProductCard({ product }) {
   const previewColor = product.colors[0]
-  const src = `/majice/${product.folder}/${previewColor.file}`
+  const src = `/${product.basePath ?? 'majice'}/${product.folder}/${previewColor.file}`
 
   return (
     <Link
@@ -44,6 +44,42 @@ function ProductCard({ product }) {
   )
 }
 
+function KacketiCard({ product }) {
+  const previewColor = product.colors[0]
+  const src = `/kacketi/${product.folder}/${previewColor.file}`
+
+  return (
+    <Link
+      to={`/majica/${product.id}`}
+      className="group cursor-pointer bg-zinc-900 hover:bg-zinc-800 transition-colors duration-300 rounded-sm overflow-hidden block"
+    >
+      <div className="aspect-square bg-zinc-200 flex items-center justify-center p-6 overflow-hidden">
+        <img
+          src={src}
+          alt={product.name}
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-white text-sm sm:text-base font-medium tracking-wide text-center">
+          {product.name}
+        </h3>
+        <div className="flex justify-center gap-1.5 mt-2">
+          {product.colors.map((c, i) => (
+            <span
+              key={i}
+              title={c.name}
+              className="w-3 h-3 rounded-full border border-white/20 inline-block"
+              style={{ backgroundColor: c.swatch }}
+            />
+          ))}
+        </div>
+        <p className="text-yellow-500 font-semibold text-base text-center mt-3">{product.price.toFixed(2)}€</p>
+      </div>
+    </Link>
+  )
+}
+
 export default function Products() {
   const sectionRef = useRef(null)
   const [visible, setVisible] = useState(false)
@@ -67,6 +103,37 @@ export default function Products() {
   return (
     <section ref={sectionRef} id="majice" className="bg-zinc-950 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
+
+        {/* NOVO U PONUDI — Kačketi */}
+        <div className="mb-20">
+          <div className="text-center mb-10">
+            <span
+              className="inline-block bg-yellow-500 text-black text-sm font-black uppercase tracking-widest px-6 py-2.5 rounded-sm mb-5"
+              style={{ animation: 'novoGlow 1.8s ease-in-out infinite', boxShadow: '0 0 12px rgba(234,179,8,0.8)' }}
+            >
+              Novo u ponudi
+            </span>
+            <h2 className="text-white text-3xl sm:text-4xl font-bold tracking-tight">Kačketi</h2>
+            <div className="w-12 h-0.5 bg-yellow-500 mx-auto mt-4" />
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-xl mx-auto">
+            {kacketi.map((product, index) => (
+              <div
+                key={product.id}
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateY(0)' : 'translateY(40px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                  transitionDelay: visible ? `${index * 80}ms` : '0ms',
+                }}
+              >
+                <KacketiCard product={product} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Majice */}
         <div className="text-center mb-14">
           <h2 className="text-white text-3xl sm:text-4xl font-bold tracking-tight">
             Naša kolekcija
@@ -99,6 +166,7 @@ export default function Products() {
             </div>
           ))}
         </div>
+
       </div>
     </section>
   )

@@ -50,7 +50,7 @@ export default function ProductDetail() {
   }
 
   const color = product.colors[selectedColor]
-  const imgSrc = `/majice/${product.folder}/${color.file}`
+  const imgSrc = `/${product.basePath ?? 'majice'}/${product.folder}/${color.file}`
   const lightShirt = isLight(color.name)
 
   // Dynamic background: dark bg for light shirts, light bg for dark shirts
@@ -58,6 +58,8 @@ export default function ProductDetail() {
 
   const noChildSizes = !!product.noChildSizes
   const noBackText = !!product.noBackText
+  const noSizes = !!product.noSizes
+  const noCustomization = !!product.noCustomization
   const displayOriginalPrice = product.originalPrice ?? ORIGINAL_PRICE
 
   const customization = (() => {
@@ -75,17 +77,17 @@ export default function ProductDetail() {
   }
 
   const handleAddToCart = () => {
-    if (!selectedSize) return
+    if (!noSizes && !selectedSize) return
     if (!validateCustomization()) return
-    addItem(product, color, selectedSize, customization)
+    addItem(product, color, noSizes ? 'Jedna veličina' : selectedSize, customization)
     setToast(`${product.name} dodan u korpu!`)
     setTimeout(() => setToast(null), 2500)
   }
 
   const handleBuyNow = () => {
-    if (!selectedSize) return
+    if (!noSizes && !selectedSize) return
     if (!validateCustomization()) return
-    addItem(product, color, selectedSize, customization)
+    addItem(product, color, noSizes ? 'Jedna veličina' : selectedSize, customization)
     navigate('/korpa')
   }
 
@@ -143,11 +145,13 @@ export default function ProductDetail() {
               {product.name}
             </h1>
             <div className="flex items-center gap-3 mt-4">
-              <span className="text-white/40 text-lg line-through">{displayOriginalPrice.toFixed(2)}€</span>
+              {!noSizes && <span className="text-white/40 text-lg line-through">{displayOriginalPrice.toFixed(2)}€</span>}
               <span className="text-yellow-500 text-2xl font-bold">{product.price.toFixed(2)}€</span>
-              <span className="bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-sm uppercase tracking-wide">
-                -{Math.round((1 - product.price / displayOriginalPrice) * 100)}%
-              </span>
+              {!noSizes && (
+                <span className="bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-sm uppercase tracking-wide">
+                  -{Math.round((1 - product.price / displayOriginalPrice) * 100)}%
+                </span>
+              )}
             </div>
           </div>
 
@@ -170,7 +174,7 @@ export default function ProductDetail() {
                       outline: selectedColor === i ? '1px solid #D4AF37' : '1px solid rgba(255,255,255,0.1)',
                     }}
                   >
-                    <img src={`/majice/${product.folder}/${c.file}`} alt={c.name} className="w-full h-full object-cover" />
+                    <img src={`/${product.basePath ?? 'majice'}/${product.folder}/${c.file}`} alt={c.name} className="w-full h-full object-cover" />
                   </button>
                 )
               })}
@@ -178,7 +182,7 @@ export default function ProductDetail() {
           </div>
 
           {/* Size */}
-          <div>
+          {!noSizes && <div>
             <p className="text-white/40 text-xs uppercase tracking-widest mb-4">
               Veličina {selectedSize ? <span className="text-white">— {selectedSize}</span> : <span className="text-white/30">(izaberi)</span>}
             </p>
@@ -237,10 +241,10 @@ export default function ProductDetail() {
                 </div>
               </div>
             )}
-          </div>
+          </div>}
 
           {/* Customization */}
-          <div className="flex flex-col gap-4">
+          {!noCustomization && <div className="flex flex-col gap-4">
             <p className="text-white/40 text-xs uppercase tracking-widest">Personalizacija</p>
 
             {/* Prezime na leđima — sve majice osim onih sa noBackText */}
@@ -316,27 +320,27 @@ export default function ProductDetail() {
                 </div>
               )}
             </div>
-          </div>
+          </div>}
 
           {/* Buttons */}
           <div className="flex flex-col gap-3">
             <button
               onClick={handleBuyNow}
-              disabled={!selectedSize}
+              disabled={!noSizes && !selectedSize}
               className={`w-full py-4 text-sm font-semibold uppercase tracking-widest transition-all duration-300 rounded-sm
-                ${selectedSize ? 'bg-white text-black hover:bg-yellow-500 cursor-pointer' : 'bg-zinc-800 text-white/30 cursor-not-allowed'}`}
+                ${noSizes || selectedSize ? 'bg-white text-black hover:bg-yellow-500 cursor-pointer' : 'bg-zinc-800 text-white/30 cursor-not-allowed'}`}
             >
               Naruči odmah
             </button>
             <button
               onClick={handleAddToCart}
-              disabled={!selectedSize}
+              disabled={!noSizes && !selectedSize}
               className={`w-full py-4 text-sm font-semibold uppercase tracking-widest border transition-all duration-300 rounded-sm
-                ${selectedSize ? 'border-white/30 text-white hover:border-yellow-500 hover:text-yellow-500 cursor-pointer' : 'border-white/10 text-white/20 cursor-not-allowed'}`}
+                ${noSizes || selectedSize ? 'border-white/30 text-white hover:border-yellow-500 hover:text-yellow-500 cursor-pointer' : 'border-white/10 text-white/20 cursor-not-allowed'}`}
             >
               Dodaj u korpu
             </button>
-            {!selectedSize && (
+            {!noSizes && !selectedSize && (
               <p className="text-white/25 text-xs text-center">Izaberi veličinu da bi mogao naručiti</p>
             )}
           </div>

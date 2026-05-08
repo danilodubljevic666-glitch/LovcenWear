@@ -1,5 +1,20 @@
 export const ORIGINAL_PRICE = 26.99
 
+export const kacketi = [
+  { id: 'mne-kacket',       name: 'MNE Kačket',       price: 14.99, basePath: 'kacketi', folder: 'mne kacketi',       noSizes: true, noCustomization: true,
+    colors: [
+      { name: 'Crvena', file: 'MNE kacket crveni.png',  swatch: '#DC2626' },
+      { name: 'Crna',   file: 'MNE kacket crni.png',    swatch: '#1a1a1a' },
+    ],
+  },
+  { id: '20-godina-kacket', name: '20 Godina Kačket', price: 14.99, basePath: 'kacketi', folder: '20 godina kacketi', noSizes: true, noCustomization: true,
+    colors: [
+      { name: 'Crvena', file: '20 god kacket crveni.png',  swatch: '#DC2626' },
+      { name: 'Crna',   file: '20 god. crni kacket.png',   swatch: '#1a1a1a' },
+    ],
+  },
+]
+
 export const products = [
   { id: 'premium-majica',           name: 'Premium Majica',          price: 19.99, folder: 'Premium majica',
     colors: [
@@ -115,5 +130,5 @@ export const products = [
 export const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']
 
 export function getProductById(id) {
-  return products.find((p) => p.id === id)
+  return products.find((p) => p.id === id) ?? kacketi.find((p) => p.id === id)
 }

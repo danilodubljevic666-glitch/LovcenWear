@@ -69,7 +69,7 @@ function OrderModal({ items, onClose, onSuccess }) {
         city:           form.grad,
         address:        form.adresa,
         product_name:   items.map(i => i.product.name).join(', '),
-        product_image:  `${GITHUB_BASE}/majice/${encodeURIComponent(first.product.folder)}/${encodeURIComponent(first.color.file)}`,
+        product_image:  `${GITHUB_BASE}/${first.product.basePath ?? 'majice'}/${encodeURIComponent(first.product.folder)}/${encodeURIComponent(first.color.file)}`,
         color:          items.length === 1 ? first.color.name : items.map(i => i.color.name).join(', '),
         size:           items.length === 1 ? first.size       : items.map(i => i.size).join(', '),
         qty:            items.reduce((s, i) => s + i.qty, 0).toString(),
@@ -122,7 +122,7 @@ function OrderModal({ items, onClose, onSuccess }) {
             <div className="px-6 py-3 border-b border-white/10 flex flex-col gap-2">
               {items.map((item) => (
                 <div key={item.key} className="flex items-center gap-3">
-                  <img src={`/majice/${item.product.folder}/${item.color.file}`} alt={item.product.name}
+                  <img src={`/${item.product.basePath ?? 'majice'}/${item.product.folder}/${item.color.file}`} alt={item.product.name}
                     className="w-10 h-10 object-contain bg-zinc-200 rounded-sm p-0.5" />
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-xs font-medium truncate">{item.product.name}</p>
@@ -242,7 +242,7 @@ export default function Cart() {
                 <div key={item.key} className="flex items-center gap-4 bg-zinc-900 rounded-sm p-4">
                   <Link to={`/majica/${item.product.id}`}>
                     <img
-                      src={`/majice/${item.product.folder}/${item.color.file}`}
+                      src={`/${item.product.basePath ?? 'majice'}/${item.product.folder}/${item.color.file}`}
                       alt={item.product.name}
                       className="w-20 h-20 object-contain bg-zinc-200 rounded-sm p-1 shrink-0"
                     />

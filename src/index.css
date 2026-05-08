@@ -13,3 +13,8 @@ body {
   margin: 0;
   background: #000;
 }
+
+@keyframes novoGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(234,179,8,0.7), 0 0 20px rgba(234,179,8,0.3); }
+  50%       { box-shadow: 0 0 22px rgba(234,179,8,1),   0 0 45px rgba(234,179,8,0.6); }
+}

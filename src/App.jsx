@@ -48,7 +48,7 @@ function HomePage({ ready }) {
 }
 
 const HERO_SRCS = [
-  '/majice/20 godina premium majica/20 godina crvena.png',
+  '/majice/13.jul majice/A 1.png',
   '/majice/Premium majica/crvena premium.png',
 ]
 

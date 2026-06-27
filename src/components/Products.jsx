@@ -1,6 +1,15 @@
 import { Link } from 'react-router-dom'
 import { useRef, useState, useEffect } from 'react'
-import { products, kacketi, ORIGINAL_PRICE } from '../data/products'
+import { products, kacketi, sorcevi, ORIGINAL_PRICE } from '../data/products'
+
+const TYPE_FILTERS = [
+  { key: 'sorc',             label: 'Šorc' },
+  { key: 'majica',           label: 'Majica' },
+  { key: 'majica-na-kragnu', label: 'Majica na kragnu' },
+  { key: 'kacket',           label: 'Kačket' },
+]
+
+const allProducts = [...kacketi, ...sorcevi, ...products].sort((a, b) => (a.order ?? 50) - (b.order ?? 50))
 
 function ProductCard({ product }) {
   const previewColor = product.colors[0]
@@ -44,9 +53,9 @@ function ProductCard({ product }) {
   )
 }
 
-function KacketiCard({ product }) {
+function SimpleProductCard({ product }) {
   const previewColor = product.colors[0]
-  const src = `/kacketi/${product.folder}/${previewColor.file}`
+  const src = `/${product.basePath}/${product.folder}/${previewColor.file}`
 
   return (
     <Link
@@ -83,6 +92,11 @@ function KacketiCard({ product }) {
 export default function Products() {
   const sectionRef = useRef(null)
   const [visible, setVisible] = useState(false)
+  const [typeFilter, setTypeFilter] = useState(null)
+
+  const filteredProducts = typeFilter
+    ? allProducts.filter((p) => p.type === typeFilter)
+    : allProducts
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -104,37 +118,7 @@ export default function Products() {
     <section ref={sectionRef} id="majice" className="bg-zinc-950 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
 
-        {/* NOVO U PONUDI — Kačketi */}
-        <div className="mb-20">
-          <div className="text-center mb-10">
-            <span
-              className="inline-block bg-yellow-500 text-black text-sm font-black uppercase tracking-widest px-6 py-2.5 rounded-sm mb-5"
-              style={{ animation: 'novoGlow 1.8s ease-in-out infinite', boxShadow: '0 0 12px rgba(234,179,8,0.8)' }}
-            >
-              Novo u ponudi
-            </span>
-            <h2 className="text-white text-3xl sm:text-4xl font-bold tracking-tight">Kačketi</h2>
-            <div className="w-12 h-0.5 bg-yellow-500 mx-auto mt-4" />
-          </div>
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-xl mx-auto">
-            {kacketi.map((product, index) => (
-              <div
-                key={product.id}
-                style={{
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? 'translateY(0)' : 'translateY(40px)',
-                  transition: 'opacity 0.6s ease, transform 0.6s ease',
-                  transitionDelay: visible ? `${index * 80}ms` : '0ms',
-                }}
-              >
-                <KacketiCard product={product} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Majice */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-10">
           <h2 className="text-white text-3xl sm:text-4xl font-bold tracking-tight">
             Naša kolekcija
           </h2>
@@ -144,27 +128,54 @@ export default function Products() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {products.map((product, index) => (
-            <div
-              key={product.id}
-              className="flex flex-col gap-1.5"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(40px)',
-                transition: 'opacity 0.6s ease, transform 0.6s ease',
-                transitionDelay: visible ? `${index * 60}ms` : '0ms',
-              }}
+        <p className="text-white/60 text-sm text-center mb-4">
+          Odaberite proizvod koji vas zanima
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          <button
+            onClick={() => setTypeFilter(null)}
+            className={`px-4 py-2 text-xs font-semibold uppercase tracking-wide rounded-sm border transition-colors duration-200 cursor-pointer
+              ${typeFilter === null ? 'bg-yellow-500 border-yellow-500 text-black' : 'border-white/20 text-white/70 hover:border-white hover:text-white'}`}
+          >
+            Sve
+          </button>
+          {TYPE_FILTERS.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTypeFilter(t.key)}
+              className={`px-4 py-2 text-xs font-semibold uppercase tracking-wide rounded-sm border transition-colors duration-200 cursor-pointer
+                ${typeFilter === t.key ? 'bg-yellow-500 border-yellow-500 text-black' : 'border-white/20 text-white/70 hover:border-white hover:text-white'}`}
             >
-              <ProductCard product={product} />
-              {index === 0 && (
-                <p className="text-red-500 text-xs font-semibold text-center tracking-wide"
-                  style={{ animation: 'pulse 1.5s ease-in-out infinite', textShadow: '0 0 8px rgba(239,68,68,0.8)' }}>
-                  🔥 17 prodatih majici u zadnjih 24h
-                </p>
-              )}
-            </div>
+              {t.label}
+            </button>
           ))}
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          {filteredProducts.map((product, index) => {
+            const isSimple = product.type === 'sorc' || product.type === 'kacket'
+            return (
+              <div
+                key={product.id}
+                className="flex flex-col gap-1.5"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateY(0)' : 'translateY(40px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                  transitionDelay: visible ? `${index * 60}ms` : '0ms',
+                }}
+              >
+                {isSimple ? <SimpleProductCard product={product} /> : <ProductCard product={product} />}
+                {index === 0 && !isSimple && (
+                  <p className="text-red-500 text-xs font-semibold text-center tracking-wide"
+                    style={{ animation: 'pulse 1.5s ease-in-out infinite', textShadow: '0 0 8px rgba(239,68,68,0.8)' }}>
+                    🔥 17 prodatih majici u zadnjih 24h
+                  </p>
+                )}
+              </div>
+            )
+          })}
         </div>
 
       </div>

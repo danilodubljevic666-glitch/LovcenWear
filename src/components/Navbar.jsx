@@ -11,13 +11,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" onClick={() => window.scrollTo({ top: 0 })} className="flex items-center">
             <img src="/logo.PNG" alt="LovcenWear Logo" className="h-16 w-auto object-contain" />
           </Link>
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">
+            <Link to="/" onClick={() => window.scrollTo({ top: 0 })} className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">
               Home
             </Link>
             <a href="/#majice" className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">
@@ -58,7 +58,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div className={`md:hidden overflow-hidden transition-all duration-300 ${menuOpen ? 'max-h-48' : 'max-h-0'}`}>
         <div className="px-4 pb-4 flex flex-col gap-4 bg-black">
-          <Link to="/" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wide uppercase py-1">
+          <Link to="/" onClick={() => { setMenuOpen(false); window.scrollTo({ top: 0 }) }} className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wide uppercase py-1">
             Home
           </Link>
           <a href="/#majice" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wide uppercase py-1">
